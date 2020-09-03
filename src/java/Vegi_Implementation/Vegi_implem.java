@@ -25,7 +25,9 @@ import java.util.logging.Logger;
  * @author #USER
  */
 public class Vegi_implem extends UnicastRemoteObject implements Vegi_interf {
+    //conn is an object for Connection class used to initiate session for database connection
     Connection conn;
+    //Contructor for exposing the class
     public Vegi_implem() throws RemoteException{
         super();
         getConnection();
@@ -34,35 +36,46 @@ public class Vegi_implem extends UnicastRemoteObject implements Vegi_interf {
     @Override
     public void getConnection() throws RemoteException {
          try {
+             //Binding the class with mysql driver
             Class.forName("com.mysql.jdbc.Driver");
+            //Assign the conn object to database connection by supplying(dbname,port,permission)
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/VegiEngine", "root", "");
         } catch (ClassNotFoundException ex) {
+            //catching database error
             Logger.getLogger(Vegi_implem.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Vegi_implem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    //does't return anything
     @Override
     public void addVegetable(VegiClass vegis) throws RemoteException {
         try {
+            //insert query that receives begi_name and vegi_price
             String query = "INSERT INTO vegi_info(vegi_name,vegi_price) VALUES(?,?)";
+            //Bind the insert query with thhe conn object
             PreparedStatement stmt = conn.prepareStatement(query);
+            //getting the supplied variables(vegi_name and price)
             stmt.setString(1, vegis.getVegi_name());            
             stmt.setDouble(2, vegis.getVegi_price());
+            //execute the query
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Vegi_implem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    //Return a List
     @Override
     public List<VegiClass> getVegetableInfo() throws RemoteException {
+        //Creat a list variable to hold the return items later
         List<VegiClass> list = new ArrayList<>();
         try {
-            
+            //select query to get vegi_info
             String query = "SELECT * FROM vegi_info";
+            //Bind the insert query with thhe conn object
             PreparedStatement stmt = conn.prepareStatement(query);
+            //execute the query and store the result in res object
             ResultSet res = stmt.executeQuery();
             //Extract data from result set
             while(res.next()){
@@ -72,14 +85,17 @@ public class Vegi_implem extends UnicastRemoteObject implements Vegi_interf {
                 
                 //Setting the values
                 VegiClass vegis = new VegiClass();
+                //iterate while temporarily storing the values in vegis object
                 vegis.setVegi_name(name);
                 vegis.setVegi_price(price);
+                //add each row to the list
                 list.add(vegis);
             }
         }catch(SQLException ex){
             Logger.getLogger(Vegi_implem.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //return the full list
         return list;
     }
 

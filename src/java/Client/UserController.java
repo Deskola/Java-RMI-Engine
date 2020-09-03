@@ -38,49 +38,68 @@ public class UserController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try{
+                //if register button is pressed
                 if(request.getParameter("register") != null){
+                    //Connect to tha server using ip and port
                     Registry reg = LocateRegistry.getRegistry("127.0.0.1", 5000);
+                    //bind the interface with the server name while also creating the instance of the UserInterface(i.e uint)
                     UserInterface uint = (UserInterface)reg.lookup("Server2");
                     
+                    //get the parameters(username,email...) from index.jsp and store them in local variable(name,emil,password,role)
                     String username = request.getParameter("username");
                     String email = request.getParameter("email");
                     String password = request.getParameter("password");
                     String role = request.getParameter("role");
                     
+                    //create obj of UserClass(user)
                     User user = new User();
+                    //store the above localvariables(username,email,password,role) into the user object using set methods
                     user.setUsername(username);
                     user.setEmail(email);
                     user.setPassword(password);
                     user.setRole(role);
                     
+                    //pass the obj user into the register function
                     uint.registerUser(user);
+                    //return a response message if the action(i.e registerUser) is successful
                     response.sendRedirect("index.jsp?msg=newuser");
-                    
+                
+                //if the login button is pressed
                 }else if(request.getParameter("login") != null){
+                    //Connect to tha server using ip and port
                     Registry reg = LocateRegistry.getRegistry("127.0.0.1", 5000);
+                    //bind the interface with the server name while also creating the instance of the UserInterface(i.e uint)
                     UserInterface uint = (UserInterface)reg.lookup("Server2");
                     
+                    //get the parameters(username,password) from index.jsp and store them in local variable(username,password)
                     String username = request.getParameter("username");
                     String password = request.getParameter("password");
                     
+                    //create obj of UserClass(user)
                     User user = new User();
+                    //store the above localvariables(username,password) into the user object using set methods
                     user.setUsername(username);
                     user.setPassword(password);
                     
+                    //creat a local variable(i.e result) of type boolean to store the value returned from login function
                     boolean result = uint.login(user);
+                    //if the result is TRUE
                     if(result){
                         
-                        request.setAttribute("username", username);
-                        //request.getSession(true).setAttribute("username", username);
+                        //store the username variable and forward it to the home.jsp page
+                        request.setAttribute("username", username);                        
                         request.getRequestDispatcher("home.jsp").forward(request, response);
                         
-                          //response.sendRedirect(request.getContextPath()+"/home.jsp");
+                          
                     }else{
+                        //if the result if FALSE
+                        //display error message
                         response.sendRedirect("index.jsp?msg=errlogin");
                     }
                 }
                 
             }catch(Exception ex){
+                //printing error
                 ex.printStackTrace();
             }
         }

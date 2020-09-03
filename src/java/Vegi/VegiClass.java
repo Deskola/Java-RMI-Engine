@@ -11,6 +11,7 @@ import java.io.Serializable;
  *
  * @author #USER
  */
+//Serializable -process of converting object state into a format that can be transmitted or stored from the server to client
 public class VegiClass implements Serializable {
     
     int id;

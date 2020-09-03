@@ -11,13 +11,14 @@ import java.io.Serializable;
  *
  * @author #USER
  */
+//Serializable -process of converting object state into a format that can be transmitted or stored from the server to client
 public class User implements Serializable {
     int id;
     String username;
     String email;
     String password;
     String role;
-
+//empty constructor
     public User() {
         int id = 0;
         String username = null;

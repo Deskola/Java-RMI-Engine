@@ -63,7 +63,7 @@
         <div>
             <div style="float: left;">
                 <h4>Add New vegetables</h4>
-                <form method="POST" action="Controller">
+                <form method="POST" action="VegiController">
                     <table>
                         <tr>
                             <td>Vegetable Name</td>
@@ -91,7 +91,7 @@
             </div>
             <div style="float: left;margin-left: 300px;">
                 <h4>Calculation</h4>
-                <form action="Controller" method="POST">
+                <form action="VegiController" method="POST">
                     <table border='1'>
                         <tr>
                             <th style="padding-left: 0px; padding-right: 2.5px;"><label>Vegetable Name</label></th>
@@ -158,7 +158,7 @@
             </div>
             <div style="float: right;">
                 <h4>Delete the Vegetables</h4>
-                <form action="Controller" method="POST">
+                <form action="VegiController" method="POST">
                     <input type="text" name="delname" placeholder="Enter Name">
                     <input type="submit" name="delete" value="DELETE">
                 </form> 
